@@ -1,0 +1,28 @@
+from analisador import coletar_instagram, gerar_insights_gemini
+from datetime import datetime
+from gerar_pdf import gerar_relatorio
+
+
+username = str(input("Type the Instagram name(withoud @)> "))
+
+data = coletar_instagram(username)
+insight = gerar_insights_gemini(data)
+date_now = datetime.now().strftime("%m/%d/%Y at %H:%M")
+
+
+segmento = input("Account niche/segment (ex: gaming, fitness, food)> ")
+client_name = input("Your name or agency name> ")
+
+dados = {
+    "nome_concorrente": username,
+    "data_geracao": date_now,
+    "insights": insight,
+    "instagram": username,
+    "instagram_dados": data,
+    "segmento": segmento,
+    "nome_cliente": client_name
+}
+
+nome_arquivo = f"report_{username}.pdf"
+gerar_relatorio(dados, nome_arquivo)
+print(f"Report generated: {nome_arquivo}")
