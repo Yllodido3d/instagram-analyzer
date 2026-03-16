@@ -2,16 +2,18 @@ from analisador import coletar_instagram, gerar_insights_gemini
 from datetime import datetime
 from gerar_pdf import gerar_relatorio
 
-
-username = str(input("Type the Instagram name(withoud @)> "))
-
-data = coletar_instagram(username)
-insight = gerar_insights_gemini(data)
 date_now = datetime.now().strftime("%m/%d/%Y at %H:%M")
-
-
+username = str(input("Type the Instagram name(withoud @)> "))
 segmento = input("Account niche/segment (ex: gaming, fitness, food)> ")
 client_name = input("Your name or agency name> ")
+
+
+data = coletar_instagram(username)
+if not data:
+    print("fail to get data, check the logs")
+    exit()
+insight = gerar_insights_gemini(data)
+
 
 dados = {
     "nome_concorrente": username,
