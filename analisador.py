@@ -125,5 +125,3 @@ def gerar_insights_gemini(dados_instagram, trys=3):
 
     logging.error(f"Failed to generate insights after {trys} tries.")
     return None
-
-gerar_insights_gemini(coletar_instagram("xarolao"))
