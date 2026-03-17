@@ -2,8 +2,14 @@ import time
 import requests
 from datetime import datetime
 import json
-import config
 import logging
+from dotenv import load_dotenv
+import os
+load_dotenv()
+
+gemini_key = os.getenv("gemini_key")
+apify_token = os.getenv("apify_token")
+
 logging.basicConfig(level=logging.INFO,
                     filename="errors.log",
                     filemode="a",
@@ -14,7 +20,7 @@ def coletar_instagram(username, trys=3):
     for i in range(trys):
         try:
             URL = "https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items"
-            params = {"token": config.apify_token}
+            params = {"token": apify_token}
             payload = {
                 "usernames": [username],
                 "resultLimit": 15
@@ -53,14 +59,13 @@ def coletar_instagram(username, trys=3):
         except Exception as e:
             logging.warning(f"tries: {i}, error: {e}")
             time.sleep(2 ** i)
-    logging.error(f"Attempts exhausted, tryes: {i}")
+    logging.error(f"Attempts exhausted, tryes: {i}\n")
     return None
 
 
 def gerar_insights_gemini(dados_instagram, trys=3):
     for i in range(trys):
         try:
-            gemini_key = config.gemini_key
             URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={gemini_key}"
 
             json_template = '''{
@@ -106,7 +111,7 @@ def gerar_insights_gemini(dados_instagram, trys=3):
 
         except KeyError:
             logging.error(
-                f"The API returned an invalid response: {resposta.text}")
+                f"The API returned an invalid response: {resposta.text}\n")
             return None
         except Exception as e:
             logging.warning(f"tries: {i}, error: {str(e)}")
