@@ -1,11 +1,11 @@
-import re
 import time
 import requests
-from datetime import datetime
 import json
 import logging
 from dotenv import load_dotenv
 import os
+
+
 load_dotenv()
 
 gemini_key = os.getenv("gemini_key")
@@ -111,9 +111,8 @@ def gerar_insights_gemini(dados_instagram, trys=3):
             resultado = json.loads(texto.strip())
             with open("insight.json", "w") as f:
                 json.dump(resultado, f, indent=4)
-            
-            return resultado
 
+            return resultado
 
         except KeyError:
             logging.error(
@@ -125,3 +124,6 @@ def gerar_insights_gemini(dados_instagram, trys=3):
 
     logging.error(f"Failed to generate insights after {trys} tries.")
     return None
+
+
+gerar_insights_gemini(coletar_instagram("xarolao"))
