@@ -1,3 +1,4 @@
+import re
 import time
 import requests
 from datetime import datetime
@@ -107,7 +108,12 @@ def gerar_insights_gemini(dados_instagram, trys=3):
                 texto = texto.split("```")[1]
                 if texto.startswith("json"):
                     texto = texto[4:]
-            return json.loads(texto.strip())
+            resultado = json.loads(texto.strip())
+            with open("insight.json", "w") as f:
+                json.dump(resultado, f, indent=4)
+            
+            return resultado
+
 
         except KeyError:
             logging.error(
@@ -119,3 +125,5 @@ def gerar_insights_gemini(dados_instagram, trys=3):
 
     logging.error(f"Failed to generate insights after {trys} tries.")
     return None
+
+gerar_insights_gemini(coletar_instagram("xarolao"))

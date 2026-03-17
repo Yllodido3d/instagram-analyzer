@@ -1,6 +1,6 @@
-config.py
 __pycache__/
 *.pyc
 *.pdf
 *.log
 .env
+*.json
